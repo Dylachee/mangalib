@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'drf_yasg',
+    'ckeditor',
     #my apps
     'apps.users',
     'apps.articles',
+    
 ]
 
 MIDDLEWARE = [
@@ -162,3 +164,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 2, # количество объектов на странице
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'], # класс используемый для ф
 }
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_IMAGE_BACKEND = 'pillow'

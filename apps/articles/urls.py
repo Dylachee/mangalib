@@ -1,7 +1,21 @@
-from django.urls import path
-from .views import MyModelList, MyModelDetail
+from django.urls import path, include
+from .views import MyModelList, MyModelDetail , CommentViewSet
+from rest_framework.routers import DefaultRouter
+from ckeditor_uploader import views as ckeditor_views
+
+router = DefaultRouter() 
+router.register('article', MyModelList, 'articles')
+router.register('comment', CommentViewSet, 'comments')
 
 urlpatterns = [
-    path('article/', MyModelList.as_view()),
-    path('articles/<int:pk>/', MyModelDetail.as_view()),
-]
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('ckeditor/upload/', ckeditor_views.upload, name='ckeditor_upload'),
+    path('ckeditor/browse/', ckeditor_views.browse, name='ckeditor_browse'),
+] + router.urls
+
+
+
+
+
+
+
