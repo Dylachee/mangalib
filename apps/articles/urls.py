@@ -1,11 +1,12 @@
 from django.urls import path, include
-from .views import MyModelList, MyModelDetail , CommentViewSet
+from .views import MyModelList, MyModelDetail , ReviewSerializer , ReviewViewSet
 from rest_framework.routers import DefaultRouter
 from ckeditor_uploader import views as ckeditor_views
 
 router = DefaultRouter() 
 router.register('article', MyModelList, 'articles')
-router.register('comment', CommentViewSet, 'comments')
+router.register('reviews', ReviewViewSet)
+
 
 urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
