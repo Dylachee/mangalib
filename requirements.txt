@@ -11,3 +11,5 @@ python-decouple
 django-filter
 # work with images
 Pillow
+#admin panel
+django-ckeditor

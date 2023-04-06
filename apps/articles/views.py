@@ -11,6 +11,7 @@ from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.generics import CreateAPIView
+from .permissions import IsAuthenticatedOrReadOnly
 class MyModelList(ModelViewSet, Article):
 
     queryset = Article.objects.all() 
@@ -45,4 +46,5 @@ class MyModelDetail(generics.RetrieveUpdateDestroyAPIView):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
