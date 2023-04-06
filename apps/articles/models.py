@@ -22,10 +22,6 @@ class RelatedModel(models.Model):
     mymodel = models.ForeignKey(Article, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
 
-
-from django.db import models
-from .models import Article
-
 class Review(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     text = models.TextField()
