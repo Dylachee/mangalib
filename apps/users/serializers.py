@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from .utils import send_activation_code, create_activation_code
+from django.contrib.auth.forms import PasswordResetForm
 
 User = get_user_model()
 
@@ -74,7 +75,29 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
 
+    def validate_email(self, value):
+        User = get_user_model()
+
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Пользователь с таким email не найден")
+
+        return value
+
+    def save(self):
+        request = self.context.get("request")
+        email = self.validated_data["email"]
+        form = PasswordResetForm(data={"email": email})
+
+        if form.is_valid():
+            form.save(
+                request=request,
+                use_https=request.is_secure(),
+                email_template_name="registration/password_reset_email.html",
+                subject_template_name="registration/password_reset_subject.txt",
+            )
 
 
 
