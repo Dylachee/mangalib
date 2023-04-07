@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics , viewsets
-from .models import Article , Review
-from .serializers import MyModelSerializer, ReviewSerializer
+from .models import Article , Review,Tag, Like
+from .serializers import MyModelSerializer, ReviewSerializer, LikeSerializer, RatingSerializer, TagSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAuthor
@@ -35,6 +35,28 @@ class MyModelList(ModelViewSet, Article):
             self.permission_classes = [IsAuthor]
         return super().get_permissions()
     
+    @action(methods=['POST'], detail=True)
+    def like(self, request, pk=None):
+        article = self.get_object()
+        like = Like.objects.filter(user=request.user, article=article)
+        if like.exists():
+            like.delete()
+            return Response({'liked': False})
+        else:
+            Like.objects.create(user=request.user, article=article).save()
+            return Response({'liked': True})
+        
+
+    @action(methods=['POST'], detail=True, url_path='rate')
+    def rate_article(self, request, pk=None) -> Response:
+        article = self.get_object()
+        serializer = RatingSerializer(data=request.data, context={'request': request, 'article': article})
+        serializer.is_valid(raise_exception=True)
+        serializer.save(article=article)
+        return Response(serializer.data)
+        
+
+    
     
 
 class MyModelDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -46,3 +68,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
+class LikeViewSet(viewsets.ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+class TagViewSet(ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
