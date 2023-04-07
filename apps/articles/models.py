@@ -27,6 +27,9 @@ class Review(models.Model):
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # поле рейтинга
+    rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0, blank=True)
+
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
