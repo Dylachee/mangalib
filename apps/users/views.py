@@ -8,6 +8,8 @@ from rest_framework.authtoken.models import Token
 from .serializers import RegistrationSerializer, ActivationSerializer, LoginSerializer , PasswordResetSerializer
 from rest_framework import status , generics
 from django.contrib.auth.views import PasswordResetView
+from .tasks import send_email
+
 
 
 
@@ -56,7 +58,13 @@ class PasswordResetView(generics.GenericAPIView):
         )
 
 
-
+class MyView(APIView):
+    def post(self, request):
+        subject = request.data.get('subject')
+        message = request.data.get('message')
+        recipient_list = [request.data.get('recipient_email')]
+        send_email.delay(subject, message, recipient_list)
+        return Response({'status': 'success'})
 
 
 

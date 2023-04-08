@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from ckeditor.fields import RichTextField
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 User = get_user_model()
@@ -10,6 +10,7 @@ class Article(models.Model):
     name = models.CharField(max_length=100)
     description = RichTextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Статья'
@@ -26,9 +27,7 @@ class Review(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
-    # поле рейтинга
-    rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0, blank=True)
+    rating = models.DecimalField(max_digits=2, decimal_places=1, validators=[MinValueValidator(0.0), MaxValueValidator(5.0)], default=0.0, blank=True)
 
     class Meta:
         verbose_name = 'Отзыв'
