@@ -13,3 +13,5 @@ django-filter
 Pillow
 #admin panel
 django-ckeditor
+#celery
+celery
