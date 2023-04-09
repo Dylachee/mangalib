@@ -2,19 +2,33 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from ckeditor.fields import RichTextField
 from django.core.validators import MaxValueValidator, MinValueValidator
+from rest_framework import status
 
 
 User = get_user_model()
 
+
+class Author(models.Model):
+    name = models.CharField(max_length=100 ,null=True)
+    title = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = 'Автор'
+        verbose_name_plural = 'Авторы'
+    
+    def __str__(self) -> str:
+        return self.title
+    
 class Article(models.Model):
     name = models.CharField(max_length=100)
     description = RichTextField()
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
-
+    author = models.CharField(max_length=100)
+    
     class Meta:
-        verbose_name = 'Статья'
-        verbose_name_plural = 'Статьи'
+        verbose_name = 'Книга'
+        verbose_name_plural = 'Книги'
     
     def __str__(self):
         return self.name
@@ -27,7 +41,6 @@ class Review(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    rating = models.DecimalField(max_digits=2, decimal_places=1, validators=[MinValueValidator(0.0), MaxValueValidator(5.0)], default=0.0, blank=True)
 
     class Meta:
         verbose_name = 'Отзыв'
@@ -35,12 +48,6 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Отзыв от {self.created_at} на статью "{self.article.name}"'
-
-
-
-
-
-
 
 
 
