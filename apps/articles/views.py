@@ -70,6 +70,7 @@ class AuthorViewSet(ModelViewSet):
 
 class ArticleTagSerializer(serializers.Serializer):
     tag_ids = serializers.ListField(child=serializers.IntegerField())
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def update(self, instance, validated_data):
         tag_ids = validated_data.pop('tag_ids')
@@ -80,8 +81,10 @@ class ArticleTagSerializer(serializers.Serializer):
 class TagListCreateAPIView(generics.ListCreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class ArticleTagAPIView(generics.RetrieveUpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleTagSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
