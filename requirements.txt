@@ -15,3 +15,6 @@ Pillow
 django-ckeditor
 #celery
 celery
+psycopg2
+dj-database-url
+gunicorn

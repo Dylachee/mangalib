@@ -20,6 +20,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from rest_framework import routers
 from drf_yasg import openapi
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 schema_view = get_schema_view(
@@ -41,3 +42,5 @@ urlpatterns = [
     path('account/', include('apps.users.urls')),
     path('articles/', include('apps.articles.urls')),
 ] 
+
+urlpatterns += staticfiles_urlpatterns()
