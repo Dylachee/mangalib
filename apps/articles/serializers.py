@@ -18,7 +18,7 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ['id', 'title']
 class MyModelSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(max_length=None, use_url=True)
+    image = serializers.ImageField(max_length=None, use_url=True, required=False)
     related_models = RelatedModelSerializer(many=True, read_only=True)
     author = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all())
     tags = TagSerializer(many=True, read_only=True)
